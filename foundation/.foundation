@@ -25,7 +25,6 @@ alias gp="git push"
 alias ga="git add"
 #alias gcam="git commit --all --message"
 unalias gcam 2>/dev/null
-
 gcam() {
   git add -A
 
@@ -41,36 +40,30 @@ gcam() {
     printf "<diff>\n%s\n</diff>\n" "$diff" | claude -p \
 "You are an expert software developer writing a concise, informative git commit message.
 Analyze the provided git diff enclosed in <diff> tags.
-Use conventional commits (e.g., feat: add auth).
+Use conventional commits.
 First line under 50 chars.
-Optional body with bullet points (why + key details).
+Optional bullet body with why + key details.
 Return only the commit message.
-Do NOT use markdown or code fences (no \`\`\`)." \
+No markdown/code fences (no \`\`\`)." \
     --output-format text
   )" || return 1
 
-  # If fences still appear, remove fence lines
   msg="$(printf "%s\n" "$msg" | sed '/^```/d')"
 
   tmp="$(mktemp "${TMPDIR:-/tmp}/gcam.XXXXXX")" || return 1
+  trap 'rm -f "$tmp"' EXIT INT TERM
   printf "%s\n" "$msg" > "$tmp"
 
   editor_cmd="${VISUAL:-${EDITOR:-vi}}"
-  "$editor_cmd" "$tmp" || { rm -f "$tmp"; return 1; }
+  "$editor_cmd" "$tmp" || return 1
 
-  # Abort if user left it blank/whitespace
   msg="$(cat "$tmp")"
   msg="${msg#"${msg%%[![:space:]]*}"}"
   msg="${msg%"${msg##*[![:space:]]}"}"
 
-  if [ -z "$msg" ]; then
-    echo "Commit aborted (empty message)"
-    rm -f "$tmp"
-    return 1
-  fi
+  [ -n "$msg" ] || { echo "Commit aborted (empty message)"; return 1; }
 
   git commit -F "$tmp"
-  rm -f "$tmp"
 }
 
 set -o vi # enable vim motions in shell text
