@@ -4,6 +4,8 @@ Generate precise, conventional commit messages following **Conventional Commits 
 
 > **CRITICAL**: Output ONLY raw plain text. ABSOLUTELY NO triple backticks (```), code fences, or markdown formatting of any kind. The output must be directly pasteable into `git commit -m`.
 
+> **STOP**: Before responding, verify your output does NOT start with ``` - if it does, remove the fences entirely.
+
 ## Trigger
 
 Activate when the user:
@@ -73,6 +75,14 @@ Return **only** the raw commit message text.
 - Output plain text ONLY, exactly as it should appear in the git commit
 
 Your output should start directly with the commit type (e.g., `feat`, `fix`, `docs`) - not with ``` or any other prefix.
+
+**WRONG** (do NOT do this):
+```
+feat(auth): add login
+```
+
+**CORRECT** (do THIS - raw text, no fences):
+feat(auth): add login
 
 ## Examples
 

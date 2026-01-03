@@ -8,9 +8,9 @@ base set of cli/tui tools for GST!!! of course, this also installs
 complete following:
 
 1. install [homebrew](https://brew.sh/)
-2. `brew install stow neovim lazygit lazydocker yazi gdu direnv eza fzf atuin zoxide carapace starship` 
+2. `brew install ghostty stow neovim lazygit lazydocker yazi gdu direnv eza fzf atuin zoxide carapace starship` 
 3. `brew install --cask claude-code`
-4. `stow --target $HOME foundation gcam`
+4. `stow --target $HOME foundation gcam ghostty`
 5. `echo source ~/.foundation >> ~/.zshrc`
 6. `source ~/.zshrc`
 7. enjoy!

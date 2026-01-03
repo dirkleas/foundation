@@ -1,0 +1,13 @@
+#theme = dark:Builtin Dark,light:Builtin Light
+
+shell-integration = zsh
+font-size = 18
+font-family = Menlo
+window-save-state = always
+background-opacity = 0.85
+background-blur-radius = 40
+focus-follows-mouse = true
+
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+keybind = shift+enter=text:\n

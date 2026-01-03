@@ -68,6 +68,7 @@ gcam() {
 set -o vi # enable vim motions in shell text
 
 export EDITOR=vi
+export VISUAL=vi
 export API_TIMEOUT_MS=900000 
 
 source <(fzf --zsh)
