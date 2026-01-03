@@ -1,17 +1,19 @@
 # foundation
 
-base set of cli/tui tools for GST!!!
+base set of cli/tui tools for GST!!! of course, this also installs 
+[claude code](https://claude.com/product/claude-code) and a skill or two...
 
 ## setup
 
 complete following:
 
-0. install [homebrew](https://brew.sh/)
-1. `brew install stow neovim lazygit lazydocker yazi gdu direnv eza fzf zoxide carapace starship` 
-2. `stow --target $HOME foundation`
-3. `echo source ~/.foundation >> ~/.zshrc`
-4. `source ~/.zshrc`
-4. enjoy!
+1. install [homebrew](https://brew.sh/)
+2. `brew install stow neovim lazygit lazydocker yazi gdu direnv eza fzf zoxide carapace starship` 
+3. `brew install --cask claude-code`
+4. `stow --target $HOME foundation gcam`
+5. `echo source ~/.foundation >> ~/.zshrc`
+6. `source ~/.zshrc`
+7. enjoy!
 
 ## update
 
