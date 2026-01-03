@@ -45,6 +45,7 @@ Activate when the user:
 - Explain **why** and **what**, not how
 - Wrap lines at 72 characters
 - Separate from subject with blank line
+- **Always prefix each activity item with " - "**, even for single items
 
 ### Footer (when applicable)
 - `BREAKING CHANGE: <description>` for breaking changes
@@ -78,8 +79,8 @@ Feature addition:
 
     feat(auth): add OAuth2 login support
 
-    Implement Google and GitHub OAuth2 providers to give users
-    alternative login options beyond email/password.
+     - Implement Google and GitHub OAuth2 providers to give users
+       alternative login options beyond email/password.
 
     Refs: #456
 
@@ -87,8 +88,8 @@ Bug fix:
 
     fix(api): prevent null pointer on empty response
 
-    Guard against undefined payload when upstream service
-    returns 204 No Content unexpectedly.
+     - Guard against undefined payload when upstream service
+       returns 204 No Content unexpectedly.
 
     Closes: #789
 
@@ -100,8 +101,8 @@ Breaking change:
 
     feat(config)!: migrate to YAML configuration
 
-    Replace JSON config files with YAML for improved readability
-    and comment support.
+     - Replace JSON config files with YAML for improved readability
+       and comment support.
 
     BREAKING CHANGE: existing .json config files must be converted to .yaml
     Refs: #321
