@@ -3,6 +3,14 @@
 # foundation...
 #
 
+export HISTSIZE=100000
+export SAVEHIST=100000
+HISTFILE=~/.zsh_history
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt EXTENDED_HISTORY
+
 autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey '^X^E' edit-command-line
@@ -10,7 +18,6 @@ bindkey '^X^E' edit-command-line
 autoload -Uz compinit && compinit -C
 source <(carapace _carapace)
 
-alias stow="stow --target $HOME"
 alias vi=nvim
 alias lzg=lazygit
 alias lzd=lazydocker
