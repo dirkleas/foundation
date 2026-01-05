@@ -40,14 +40,10 @@ gcam() {
     return 1
   fi
 
-  local diff msg tmp editor_cmd
-  diff="$(git diff --cached)"
+  local msg tmp editor_cmd
+  local skill_cli="$HOME/h4x/deva/foundation/skill-runner/skill"
 
-  msg="$(
-    printf "<diff>\n%s\n</diff>" "$diff" | claude -p \
-      "Write a commit message for this diff." \
-      --output-format text
-  )" || return 1
+  msg="$("$skill_cli" run commit-messager)" || return 1
 
   tmp="$(mktemp "${TMPDIR:-/tmp}/gcam.XXXXXX")" || return 1
   trap 'rm -f "$tmp"' EXIT INT TERM

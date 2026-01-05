@@ -1,0 +1,385 @@
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "claude-code-sdk>=0.0.25",
+#     "pyyaml>=6.0",
+#     "pydantic>=2.0",
+#     "typer>=0.12.0",
+#     "rich>=13.0",
+# ]
+# ///
+"""Skill Runner - Execute Claude skills from CLI.
+
+Usage:
+    skill run <name> [--input key=value]
+    skill list [-v]
+    skill show <name>
+
+Examples:
+    skill run commit-messager
+    git diff --cached | skill run commit-messager
+    skill run commit-messager --input diff="$(git diff --cached)"
+"""
+
+from __future__ import annotations
+
+import asyncio
+import subprocess
+import sys
+from pathlib import Path
+from typing import Annotated, Any
+
+import typer
+import yaml
+from claude_code_sdk import ClaudeCodeOptions, query
+from pydantic import BaseModel, Field
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+
+
+# === Schema ===
+
+
+class SkillInput(BaseModel):
+    """Definition of a skill input."""
+
+    command: str | None = Field(
+        default=None, description="Shell command to auto-gather this input"
+    )
+    description: str = Field(default="", description="Human-readable description")
+    required: bool = Field(default=True, description="Whether this input is required")
+
+
+class SkillOutput(BaseModel):
+    """Definition of skill output format."""
+
+    format: str = Field(default="text", description="Output format: text, json, markdown")
+
+
+class Skill(BaseModel):
+    """A skill definition."""
+
+    name: str = Field(description="Skill name/identifier")
+    description: str = Field(default="", description="What this skill does")
+    inputs: dict[str, SkillInput] = Field(
+        default_factory=dict, description="Input definitions"
+    )
+    output: SkillOutput = Field(default_factory=SkillOutput, description="Output format")
+    prompt: str = Field(description="The prompt template with {{input}} placeholders")
+
+    def render_prompt(self, inputs: dict[str, str]) -> str:
+        """Render the prompt template with provided inputs."""
+        result = self.prompt
+        for key, value in inputs.items():
+            result = result.replace(f"{{{{{key}}}}}", value)
+        return result
+
+
+def parse_skill(content: str, name: str = "unknown") -> Skill:
+    """Parse a skill from markdown with YAML frontmatter."""
+    if content.startswith("---"):
+        parts = content.split("---", 2)
+        if len(parts) >= 3:
+            frontmatter = parts[1].strip()
+            body = parts[2].strip()
+        else:
+            frontmatter = ""
+            body = content
+    else:
+        frontmatter = ""
+        body = content
+
+    meta = yaml.safe_load(frontmatter) if frontmatter else {}
+    meta = meta or {}
+
+    raw_inputs = meta.get("inputs", {})
+    inputs = {}
+    for inp_name, inp_def in raw_inputs.items():
+        if isinstance(inp_def, dict):
+            inputs[inp_name] = SkillInput(**inp_def)
+        else:
+            inputs[inp_name] = SkillInput(description=str(inp_def))
+
+    raw_output = meta.get("output", {})
+    if isinstance(raw_output, dict):
+        output = SkillOutput(**raw_output)
+    else:
+        output = SkillOutput(format=str(raw_output) if raw_output else "text")
+
+    return Skill(
+        name=meta.get("name", name),
+        description=meta.get("description", ""),
+        inputs=inputs,
+        output=output,
+        prompt=body,
+    )
+
+
+def load_skill(name: str, search_paths: list[Path] | None = None) -> Skill:
+    """Load a skill by name from known paths."""
+    if search_paths is None:
+        search_paths = []
+
+    paths_to_check = [
+        Path.cwd() / ".claude" / "skills" / name / "SKILL.md",
+        Path.home() / ".claude" / "skills" / name / "SKILL.md",
+        *[p / name / "SKILL.md" for p in search_paths],
+        *[p / f"{name}.md" for p in search_paths],
+    ]
+
+    for path in paths_to_check:
+        if path.exists():
+            content = path.read_text()
+            return parse_skill(content, name)
+
+    searched = "\n  ".join(str(p) for p in paths_to_check)
+    raise FileNotFoundError(f"Skill '{name}' not found. Searched:\n  {searched}")
+
+
+def list_skills(search_paths: list[Path] | None = None) -> list[dict[str, Any]]:
+    """List all available skills."""
+    if search_paths is None:
+        search_paths = []
+
+    all_paths = [
+        Path.cwd() / ".claude" / "skills",
+        Path.home() / ".claude" / "skills",
+        *search_paths,
+    ]
+
+    skills = []
+    seen: set[str] = set()
+
+    for base_path in all_paths:
+        if not base_path.exists():
+            continue
+        for skill_dir in base_path.iterdir():
+            if skill_dir.is_dir():
+                skill_file = skill_dir / "SKILL.md"
+                if skill_file.exists() and skill_dir.name not in seen:
+                    seen.add(skill_dir.name)
+                    try:
+                        skill = parse_skill(skill_file.read_text(), skill_dir.name)
+                        skills.append({
+                            "name": skill.name,
+                            "description": skill.description,
+                            "path": str(skill_file),
+                            "inputs": list(skill.inputs.keys()),
+                        })
+                    except Exception:
+                        pass
+
+    return skills
+
+
+# === Core ===
+
+
+class SkillRunner:
+    """Executes skills via Claude Code SDK (uses subscription auth)."""
+
+    def __init__(
+        self,
+        model: str = "claude-sonnet-4-20250514",
+        max_turns: int = 1,
+    ):
+        self.model = model
+        self.max_turns = max_turns
+
+    def gather_input(self, command: str) -> str:
+        """Execute a shell command to gather input."""
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        if result.returncode != 0 and result.stderr:
+            raise RuntimeError(f"Command failed: {command}\n{result.stderr}")
+        return result.stdout
+
+    def resolve_inputs(self, skill: Skill, provided: dict[str, str]) -> dict[str, str]:
+        """Resolve all inputs - use provided values or auto-gather."""
+        resolved = {}
+        for name, input_def in skill.inputs.items():
+            if name in provided:
+                resolved[name] = provided[name]
+            elif input_def.command:
+                resolved[name] = self.gather_input(input_def.command)
+            elif input_def.required:
+                raise ValueError(
+                    f"Missing required input '{name}' and no command to auto-gather"
+                )
+        return resolved
+
+    async def _query(self, prompt: str) -> str:
+        """Run a query via Claude Code SDK."""
+        options = ClaudeCodeOptions(
+            model=self.model,
+            max_turns=self.max_turns,
+        )
+
+        result_parts = []
+        async for message in query(prompt=prompt, options=options):
+            if hasattr(message, "content"):
+                for block in message.content:
+                    if hasattr(block, "text"):
+                        result_parts.append(block.text)
+
+        return "".join(result_parts).strip()
+
+    def run(
+        self,
+        skill_name: str,
+        inputs: dict[str, str] | None = None,
+        stdin: str | None = None,
+    ) -> str:
+        """Run a skill by name using Claude Code SDK."""
+        skill = load_skill(skill_name)
+        provided = inputs or {}
+
+        if stdin and len(skill.inputs) == 1 and not provided:
+            input_name = list(skill.inputs.keys())[0]
+            provided[input_name] = stdin
+
+        resolved = self.resolve_inputs(skill, provided)
+        prompt = skill.render_prompt(resolved)
+
+        return asyncio.run(self._query(prompt))
+
+
+# === CLI ===
+
+app = typer.Typer(
+    name="skill",
+    help="Run Claude skills from the command line.",
+    no_args_is_help=True,
+)
+console = Console()
+err_console = Console(stderr=True)
+
+
+@app.command()
+def run(
+    skill_name: Annotated[str, typer.Argument(help="Name of the skill to run")],
+    inputs: Annotated[
+        list[str] | None,
+        typer.Option("--input", "-i", help="Input as name=value (repeatable)"),
+    ] = None,
+    model: Annotated[
+        str,
+        typer.Option("--model", "-m", help="Model to use"),
+    ] = "claude-sonnet-4-20250514",
+    raw: Annotated[
+        bool,
+        typer.Option("--raw", "-r", help="Raw output without formatting"),
+    ] = True,
+) -> None:
+    """Run a skill with optional inputs.
+
+    Inputs via --input, stdin, or auto-gathered from skill commands.
+    Uses Claude Code SDK with subscription auth (no API key needed).
+    """
+    input_dict: dict[str, str] = {}
+    if inputs:
+        for inp in inputs:
+            if "=" in inp:
+                key, value = inp.split("=", 1)
+                input_dict[key] = value
+            else:
+                err_console.print(f"[red]Invalid input format: {inp}[/red]")
+                err_console.print("Use: --input name=value")
+                raise typer.Exit(1)
+
+    stdin_content: str | None = None
+    if not sys.stdin.isatty():
+        stdin_content = sys.stdin.read()
+
+    try:
+        runner = SkillRunner(model=model)
+        result = runner.run(skill_name, inputs=input_dict, stdin=stdin_content)
+        if raw:
+            console.print(result, highlight=False, soft_wrap=True)
+        else:
+            console.print(Panel(result, title=f"[bold]{skill_name}[/bold]"))
+    except FileNotFoundError as e:
+        err_console.print(f"[red]{e}[/red]")
+        raise typer.Exit(1)
+    except ValueError as e:
+        err_console.print(f"[red]Input error: {e}[/red]")
+        raise typer.Exit(1)
+    except Exception as e:
+        err_console.print(f"[red]Error: {e}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command(name="list")
+def list_cmd(
+    verbose: Annotated[
+        bool, typer.Option("--verbose", "-v", help="Show detailed info")
+    ] = False,
+) -> None:
+    """List available skills."""
+    skills = list_skills()
+
+    if not skills:
+        console.print("[yellow]No skills found.[/yellow]")
+        console.print("\nSkills are loaded from:")
+        console.print("  ./.claude/skills/<name>/SKILL.md  (project)")
+        console.print("  ~/.claude/skills/<name>/SKILL.md  (global)")
+        return
+
+    table = Table(title="Available Skills")
+    table.add_column("Name", style="cyan")
+    table.add_column("Description")
+    if verbose:
+        table.add_column("Inputs", style="dim")
+        table.add_column("Path", style="dim")
+
+    for skill in skills:
+        if verbose:
+            table.add_row(
+                skill["name"],
+                skill["description"],
+                ", ".join(skill["inputs"]) or "-",
+                skill["path"],
+            )
+        else:
+            table.add_row(skill["name"], skill["description"])
+
+    console.print(table)
+
+
+@app.command()
+def show(
+    skill_name: Annotated[str, typer.Argument(help="Name of the skill to show")],
+) -> None:
+    """Show details about a skill."""
+    try:
+        skill = load_skill(skill_name)
+    except FileNotFoundError as e:
+        err_console.print(f"[red]{e}[/red]")
+        raise typer.Exit(1)
+
+    console.print(Panel(f"[bold]{skill.name}[/bold]\n{skill.description}"))
+
+    if skill.inputs:
+        table = Table(title="Inputs")
+        table.add_column("Name", style="cyan")
+        table.add_column("Required")
+        table.add_column("Auto-gather", style="dim")
+        table.add_column("Description")
+
+        for name, inp in skill.inputs.items():
+            table.add_row(
+                name,
+                "yes" if inp.required else "no",
+                inp.command or "-",
+                inp.description,
+            )
+        console.print(table)
+
+    console.print(f"\n[bold]Output:[/bold] {skill.output.format}")
+    prompt_preview = skill.prompt[:500] + ("..." if len(skill.prompt) > 500 else "")
+    console.print(f"\n[bold]Prompt:[/bold]\n{prompt_preview}")
+
+
+if __name__ == "__main__":
+    app()
