@@ -21,7 +21,7 @@ now complete complete setup as following:
 1. install [homebrew](https://brew.sh/)
 2. `brew install ghostty espanso stow neovim lazygit lazydocker yazi gdu direnv eza fzf atuin zoxide carapace starship` 
 3. `brew install --cask claude-code`
-4. `stow --target $HOME foundation gcam ghostty`
+4. `stow --target $HOME stow foundation gcam ghostty espanso`
 5. `echo source ~/.foundation >> ~/.zshrc`
 6. `espanso service register` # accept defaults
 7. `source ~/.zshrc`
