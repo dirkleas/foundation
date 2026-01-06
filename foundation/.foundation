@@ -31,35 +31,6 @@ alias lzd=lazydocker
 alias lzg=lazygit
 alias vi=nvim
 alias y=yazi
-unalias gcam 2>/dev/null
-gcam() {
-  git add -A
-
-  if git diff --cached --quiet; then
-    echo "No changes to commit"
-    return 1
-  fi
-
-  local msg tmp editor_cmd
-  local skill_cli="$HOME/h4x/deva/foundation/skill-runner/skill"
-
-  msg="$("$skill_cli" run commit-messager)" || return 1
-
-  tmp="$(mktemp "${TMPDIR:-/tmp}/gcam.XXXXXX")" || return 1
-  trap 'rm -f "$tmp"' EXIT INT TERM
-  printf "%s\n" "$msg" > "$tmp"
-
-  editor_cmd="${VISUAL:-${EDITOR:-vi}}"
-  "$editor_cmd" "$tmp" || return 1
-
-  msg="$(cat "$tmp")"
-  msg="${msg#"${msg%%[![:space:]]*}"}"
-  msg="${msg%"${msg##*[![:space:]]}"}"
-
-  [ -n "$msg" ] || { echo "Commit aborted (empty message)"; return 1; }
-
-  git commit -F "$tmp"
-}
 
 set -o vi # enable vim motions in shell text
 

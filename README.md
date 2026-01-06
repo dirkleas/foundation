@@ -5,7 +5,18 @@ base set of cli/tui tools for GST!!! of course, this also installs
 
 ## setup
 
-complete following:
+start by defining an environment variable in your `.zshrc` startup script specifying
+where you work on projects the foundation tools will help you with -- we call them "h4x"
+for strategic hacks...
+
+for example, if you want **h4x** in your home diretory, you'd add the following:
+
+
+```
+export H4X=$HOME/h4x
+```
+
+now complete complete setup as following:
 
 1. install [homebrew](https://brew.sh/)
 2. `brew install ghostty espanso stow neovim lazygit lazydocker yazi gdu direnv eza fzf atuin zoxide carapace starship` 
