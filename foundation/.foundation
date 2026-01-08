@@ -19,6 +19,7 @@ autoload -Uz compinit && compinit -C
 source <(carapace _carapace)
 
 alias ga="git add"
+alias gcam="ga . && ../foundation/skill-runner/skill run commit-messager | pbcopy && git commit && gp"
 alias gd="git diff"
 alias gdu=gdu-go
 alias gp="git push"
