@@ -11,7 +11,6 @@ for strategic hacks...
 
 for example, if you want **h4x** in your home diretory, you'd add the following:
 
-
 ```
 export H4X=$HOME/h4x
 ```
@@ -23,17 +22,11 @@ now complete complete setup as following:
 3. `brew install --cask claude-code`
 4. `brew install --cask karabiner-elements`
 5. run espanso and karabiner apps, considering default prompts
-6. run karbiner, considering default prompts
 7. `stow --target $HOME stow foundation gcam ghostty espanso karabiner`
 8. `echo source ~/.foundation >> ~/.zshrc`
-9. `espanso service register` # accept defaults
+9. `espanso service register` # considering default prompts
 10. `source ~/.zshrc`
 11. enjoy!
-
-## update
-
-1. `stow foundation`
-2. enjoy!
 
 no need to repeat sourcing foundation tools from `./zshrc`
 
