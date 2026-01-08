@@ -18,6 +18,7 @@ bindkey '^X^E' edit-command-line
 autoload -Uz compinit && compinit -C
 source <(carapace _carapace)
 
+alias f=yazi
 alias ga="git add"
 alias gcam="ga . && ../foundation/skill-runner/skill run commit-messager | pbcopy && git commit && gp"
 alias gd="git diff"
@@ -35,8 +36,8 @@ alias y=yazi
 
 set -o vi # enable vim motions in shell text
 
-export EDITOR=vi
-export VISUAL=vi
+export EDITOR=nvim
+export VISUAL=nvim
 export API_TIMEOUT_MS=900000 
 
 source <(fzf --zsh)
