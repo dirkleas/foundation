@@ -22,7 +22,7 @@ now complete complete setup as following:
 
     ```bash
     brew install ghostty espanso stow neovim lazygit lazydocker yazi gdu \
-        direnv eza fzf atuin zoxide carapace starship jq yq bat git \
+        direnv eza fzf atuin zoxide carapace starship jq yq bat git uv \
         --cask claude-code --cask karabiner-elements
     ```
 
