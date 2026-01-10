@@ -22,7 +22,7 @@ now complete complete setup as following:
 
     ```bash
     brew install ghostty espanso stow neovim lazygit lazydocker yazi gdu \
-        direnv eza fzf atuin zoxide carapace starship jq yq bat git uv \
+        direnv eza fzf atuin zoxide carapace starship jq yq bat git btop uv \
         --cask claude-code --cask karabiner-elements
     ```
 
@@ -61,6 +61,8 @@ now complete complete setup as following:
 5. [raycast](https://www.raycast.com/) as spotlight replacement + ai
 6. developer tools spectrum and toolchain management (e.g. stow -> nix)
 7. dotfile personalization
-8. terminal multiplexer (e.g. [tmux](https://github.com/tmux/tmux/wiki) or [zellij](https://zellij.dev/))
+8. terminal multiplexer (e.g. [tmux](https://github.com/tmux/tmux/wiki) or
+[zellij](https://zellij.dev/)) vs tiling manager (e.g.
+[aerospace](https://github.com/nikitabobko/AeroSpace))
 9. containerization (e.g. [docker](https://www.docker.com/))
 10. servers and services -- cloud vs local
