@@ -58,6 +58,17 @@ Rules:
 - Keep descriptions short and concise
 - Keep numbered list in alphabetical order by tool name
 - Delete any placeholder entries (e.g., "1. tbd")
+- **Line wrapping**: Maximum 80 columns per line. Wrap at word boundaries
+    (never split words). Use 4-space indentation for continuation lines.
+    Prefer breaking after punctuation or natural phrase boundaries when possible
+
+Example of wrapped entry:
+```
+1. [tool-name](https://github.com/org/tool) - description that needs to
+    wrap to the next line with 4-space indentation
+10. [another-tool](https://github.com/org/another) - longer description
+    that wraps correctly for double-digit items too
+```
 
 ## Step 5: Update README.md
 
