@@ -112,12 +112,16 @@ of the core foundation tools:
 [espanso](https://espanso.org/) with keyboard shortcuts via
 [hammerspoon](https://www.hammerspoon.org/))
 4. neovim distro (e.g. [lazyvim](https://www.lazyvim.org/))
-5. [raycast](https://www.raycast.com/) as spotlight replacement + ai
-6. developer tools spectrum and toolchain management (e.g. stow -> nix)
-7. dotfile personalization
-8. terminal multiplexer (e.g. [tmux](https://github.com/tmux/tmux/wiki) or
+5. [raycast](https://www.raycast.com/) as spotlight replacement, ai,
+application shortcuts
+6. [superwhisper](https://superwhisper.com/) +
+[macrowhisper](https://github.com/ognistik/macrowhisper/issues) for voice user
+interface (vui)
+7. developer tools spectrum and toolchain management (e.g. stow -> nix)
+8. dotfile personalization
+9. terminal multiplexer (e.g. [tmux](https://github.com/tmux/tmux/wiki) or
 [zellij](https://zellij.dev/)) vs tiling manager (e.g.
 [aerospace](https://github.com/nikitabobko/AeroSpace))
-9. containerization (e.g. [docker](https://www.docker.com/))
-10. servers and services -- cloud vs local
-11. create skill to keep tools docs referenced above up-to-date
+10. containerization (e.g. [docker](https://www.docker.com/))
+11. servers and services -- cloud vs local
+12. create skill to keep tools docs referenced above up-to-date
