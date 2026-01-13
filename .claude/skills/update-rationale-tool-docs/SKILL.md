@@ -3,45 +3,50 @@ name: update-rationale-tool-docs
 description: Update README.md rationale section with documentation for brew-installed tools
 ---
 
-Update the README.md rationale section to document brew-installed tools. Short-circuits if no changes needed.
+Update the README.md rationale section to document tools from Brewfile. Short-circuits if no changes needed.
 
 ## Step 1: Check if Work is Required
 
-Read README.md and extract:
-1. **Brew tools**: All tool names from the `brew install` command (both regular and `--cask`)
-2. **Documented tools**: All tool names from the rationale section links
+Read both files:
+1. **Brewfile**: Extract all tool names from `brew "toolname"` and `cask "toolname"` lines
+2. **README.md rationale section**: Extract all tool names from the numbered list links
 
 Compare these lists:
-- If all brew tools are already documented AND brew command is already sorted (regular alphabetically, then cask alphabetically), report "No changes needed" and **exit early**
+- If all Brewfile tools are already documented AND Brewfile is already sorted (brew entries alphabetically, then cask entries alphabetically), report "No changes needed" and **exit early**
 - Otherwise, continue to Step 2
 
-## Step 2: Parse and Sort Brew Command
+## Step 2: Parse and Sort Brewfile
 
-Extract all tool names from the brew command, separating into:
-- **Regular tools**: packages without `--cask` prefix
-- **Cask tools**: packages with `--cask` prefix
+Extract all tool names from Brewfile, separating into:
+- **Brew tools**: lines matching `brew "toolname"`
+- **Cask tools**: lines matching `cask "toolname"`
 
-Sort each list alphabetically.
+Sort each list alphabetically by tool name.
 
-## Step 3: Reformat Brew Command
+## Step 3: Reformat Brewfile
 
-Reformat the brew command:
-- Single logical command using `\` for line continuation
-- Wrap at 80 columns maximum
-- 4-space indentation on continuation lines
-- Regular tools first (sorted), then cask tools (sorted)
-- Each cask tool prefixed with `--cask`
+Rewrite Brewfile with sorted entries:
+- Header comment: `# Foundation CLI/TUI tools - sorted alphabetically`
+- All `brew "toolname"` entries (sorted alphabetically)
+- Blank line
+- Header comment: `# Casks - sorted alphabetically`
+- All `cask "toolname"` entries (sorted alphabetically)
 
 Example:
-```bash
-brew install atuin bat btop carapace direnv espanso eza fzf gdu ghostty \
-    git jq lazydocker lazygit neovim starship stow uv yazi yq zoxide \
-    --cask claude-code --cask karabiner-elements
+```ruby
+# Foundation CLI/TUI tools - sorted alphabetically
+brew "atuin"
+brew "bat"
+brew "btop"
+
+# Casks - sorted alphabetically
+cask "claude-code"
+cask "karabiner-elements"
 ```
 
 ## Step 4: Generate Documentation for New Tools
 
-For tools not yet documented, use web search to find:
+For tools not yet documented in README.md rationale section, use web search to find:
 - GitHub repository URL (preferred) or official website
 - Brief description of what the tool does
 
@@ -70,10 +75,10 @@ Example of wrapped entry:
     that wraps correctly for double-digit items too
 ```
 
-## Step 5: Update README.md
+## Step 5: Update Files
 
-1. Replace the existing brew command with the sorted/formatted version
-2. Merge new tool docs into existing rationale list, maintaining alphabetical order
+1. Write the sorted Brewfile if changes were needed
+2. Merge new tool docs into existing README.md rationale list, maintaining alphabetical order
 
 ## Output
 

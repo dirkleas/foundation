@@ -21,9 +21,7 @@ now complete complete setup as following:
 2. install foundation tools
 
     ```bash
-    brew install atuin bat btop carapace direnv espanso eza fzf gdu ghostty \
-        git jq lazydocker lazygit neovim starship stow uv yazi yq zoxide \
-        --cask claude-code --cask karabiner-elements
+    brew bundle install -f ./Brewfile
     ```
 
 3. install lazyvim distro to supercharge stock neovim
