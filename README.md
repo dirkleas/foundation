@@ -121,7 +121,8 @@ application shortcuts
 interface (vui)
 7. developer tools spectrum and toolchain management (e.g. stow -> nix)
 8. dotfile personalization
-9. secure, shared secrets (e.g. [pass](https://www.passwordstore.org/))
+9. secure, shared, secrets (e.g. [gopass](https://github.com/gopasspw/gopass)
+vs [pass](https://www.passwordstore.org/))
 10. terminal multiplexer (e.g. [tmux](https://github.com/tmux/tmux/wiki) or
 [zellij](https://zellij.dev/)) vs tiling manager (e.g.
 [aerospace](https://github.com/nikitabobko/AeroSpace))
