@@ -38,9 +38,9 @@ alias y=yazi
 
 function fupd() {
     echo "updating foundation tools..."
-    brew update > /dev/null 2>&1 && brew upgrade > /dev/null 2>&1
-    uv self update > /dev/null 2>&1
-    claude update > /dev/null 2>&1
+    brew update && brew upgrade
+    uv self update
+    claude update
 }
 
 set -o vi # enable vim motions in shell text
