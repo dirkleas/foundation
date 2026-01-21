@@ -17,13 +17,13 @@ export H4X=$HOME/h4x
 
 now complete complete setup as following:
 
-1. clone foundation repo into `$H4X` folder
-2. install [homebrew](https://brew.sh)
+1. clone `foundation` repo into `$H4X` folder
 
     ```bash
     git clone https://github.com/dirkleas/foundation
     ```
 
+2. install [homebrew](https://brew.sh)
 3. install foundation tools
 
     ```bash
