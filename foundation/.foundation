@@ -39,6 +39,7 @@ alias y=yazi
 function fupd() {
     echo "updating foundation tools..."
     brew update && brew upgrade
+    nvim --headless "+Lazy! update" +qa
     uv self update
     claude update
 }
