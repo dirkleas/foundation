@@ -7,7 +7,9 @@ window-save-state = always
 background-opacity = 0.85
 background-blur-radius = 40
 focus-follows-mouse = true
+shell-integration-features = ssh-terminfo
 
 keybind = super+c=copy_to_clipboard
 keybind = super+v=paste_from_clipboard
 keybind = shift+enter=text:\n
+
