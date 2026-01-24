@@ -80,32 +80,33 @@ of the core foundation tools:
     fuzzy finder
 11. [gdu](https://github.com/dundee/gdu) - fast disk usage analyzer with
     console interface written in Go
-12. [ghostty](https://github.com/ghostty-org/ghostty) - fast, feature-rich
+12. [gh](https://github.com/cli/cli) - GitHub's official command line tool
+13. [ghostty](https://github.com/ghostty-org/ghostty) - fast, feature-rich
     terminal emulator with GPU acceleration
-13. [git](https://github.com/git/git) - distributed version control system
-14. [git-lfs](https://github.com/git-lfs/git-lfs) - Git extension for
+14. [git](https://github.com/git/git) - distributed version control system
+15. [git-lfs](https://github.com/git-lfs/git-lfs) - Git extension for
     versioning large files
-15. [jq](https://github.com/jqlang/jq) - lightweight command-line JSON
+16. [jq](https://github.com/jqlang/jq) - lightweight command-line JSON
     processor
-16. [karabiner-elements](https://github.com/pqrs-org/Karabiner-Elements) -
+17. [karabiner-elements](https://github.com/pqrs-org/Karabiner-Elements) -
     powerful keyboard customization tool for macOS
-17. [lazydocker](https://github.com/jesseduffield/lazydocker) - simple
+18. [lazydocker](https://github.com/jesseduffield/lazydocker) - simple
     terminal UI for Docker and Docker Compose
-18. [lazygit](https://github.com/jesseduffield/lazygit) - simple terminal UI
+19. [lazygit](https://github.com/jesseduffield/lazygit) - simple terminal UI
     for git commands
-19. [neovim](https://github.com/neovim/neovim) - Vim-fork focused on
+20. [neovim](https://github.com/neovim/neovim) - Vim-fork focused on
     extensibility and usability
-20. [starship](https://github.com/starship/starship) - minimal, blazing-fast,
+21. [starship](https://github.com/starship/starship) - minimal, blazing-fast,
     customizable prompt for any shell
-21. [stow](https://github.com/aspiers/stow) - symlink farm manager for
+22. [stow](https://github.com/aspiers/stow) - symlink farm manager for
     dotfiles
-22. [uv](https://github.com/astral-sh/uv) - extremely fast Python package and
+23. [uv](https://github.com/astral-sh/uv) - extremely fast Python package and
     project manager written in Rust
-23. [yazi](https://github.com/sxyazi/yazi) - blazing fast terminal file
+24. [yazi](https://github.com/sxyazi/yazi) - blazing fast terminal file
     manager written in Rust
-24. [yq](https://github.com/mikefarah/yq) - portable command-line YAML, JSON,
+25. [yq](https://github.com/mikefarah/yq) - portable command-line YAML, JSON,
     XML, CSV, and TOML processor
-25. [zoxide](https://github.com/ajeetdsouza/zoxide) - smarter cd command that
+26. [zoxide](https://github.com/ajeetdsouza/zoxide) - smarter cd command that
     remembers frequently visited directories
 
 ## roadmap
