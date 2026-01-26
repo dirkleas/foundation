@@ -33,6 +33,7 @@ alias lat="la -T"
 alias ls="eza --git-ignore"
 alias lzd=lazydocker
 alias lzg=lazygit
+alias v=nvim
 alias vi=nvim
 alias y=yazi
 

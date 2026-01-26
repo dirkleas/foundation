@@ -134,10 +134,19 @@ vs [pass](https://www.passwordstore.org/))
 10. terminal multiplexer (e.g. [tmux](https://github.com/tmux/tmux/wiki) or
 [zellij](https://zellij.dev/)) vs tiling manager (e.g.
 [aerospace](https://github.com/nikitabobko/AeroSpace))
-11. containerization (e.g. [docker](https://www.docker.com/))
-12. servers and services -- cloud vs local
-13. create skill to keep tools docs referenced above up-to-date
+11. configuration management (e.g. [git](https://git-scm.com/),
+[jujitsu](https://github.com/jj-vcs/jj),
+[dvc](https://dvc.org/), [gerrit](https://www.gerritcodereview.com/),
+[gitea](https://github.com/go-gitea/gitea),
+[forgejo](https://codeberg.org/forgejo/forgejo), etc.)
+12. containerization (e.g. [docker](https://www.docker.com/),
+[portainer](https://www.portainer.io/),
+[lima](https://github.com/lima-vm/lima),
+[colima](https://github.com/abiosoft/colima), macos native containers, etc.)
+13. servers and services -- cloud vs local
+14. create skill to keep tools docs referenced above up-to-date
 
 ## considerations
 
 1. add `.editorconfig` to `.envrc` for repo defaults
+2. longterm use of github given new home in ms ai division
