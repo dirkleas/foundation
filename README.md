@@ -65,8 +65,14 @@ now complete complete setup as following:
     brew bundle
     ```
 
-4. install [claude-code](https://code.claude.com/docs/en/setup)
-5. install lazyvim distro to supercharge stock neovim:
+4. install dvc:
+
+    ```bash
+    uv tool install dvc
+    ```
+
+5. install [claude-code](https://code.claude.com/docs/en/setup)
+6. install lazyvim distro to supercharge stock neovim:
 
     ```bash
     mv ~/.config/nvim{,.bak} > /dev/null
@@ -74,8 +80,8 @@ now complete complete setup as following:
     rm -rf ~/.config/nvim/.git
     ```
 
-6. run `espanso` and `karabiner` apps, considering default prompts
-7. configure foundation tools:
+7. run `espanso` and `karabiner` apps, considering default prompts
+8. configure foundation tools:
 
     ```bash
     stow --target $HOME stow foundation lazyvim direnv gcam ghostty espanso karabiner
@@ -83,13 +89,15 @@ now complete complete setup as following:
     espanso service register # considering default prompts
     ```
 
-8. restart `ghostty` and enjoy!
+9. restart `ghostty` and enjoy!
 
 *reminder: periodically run `fupd` to keep foundation tools up-to-date...*
 
 ## tools
 
 here's a summary of the core cli/tui/gui foundation tools:
+
+homebrew managed tools:
 
 1. [atuin](https://github.com/atuinsh/atuin) - magical shell history with
     SQLite database and encrypted sync
@@ -103,48 +111,51 @@ here's a summary of the core cli/tui/gui foundation tools:
     anything, anywhere, all from the terminal
 6. [direnv](https://github.com/direnv/direnv) - loads and unloads environment
     variables based on current directory
-7. [dvc](https://github.com/iterative/dvc) - version control for large files
-    like media and datasets with cloud storage backends
-8. [espanso](https://github.com/espanso/espanso) - privacy-first,
+7. [espanso](https://github.com/espanso/espanso) - privacy-first,
     cross-platform text expander written in Rust
-9. [eza](https://github.com/eza-community/eza) - modern ls replacement with
+8. [eza](https://github.com/eza-community/eza) - modern ls replacement with
     colors, symlinks, and Git integration
-10. [ffmpeg](https://github.com/FFmpeg/FFmpeg) - complete, cross-platform
+9. [ffmpeg](https://github.com/FFmpeg/FFmpeg) - complete, cross-platform
     solution to record, convert, and stream audio and video
-11. [fzf](https://github.com/junegunn/fzf) - general-purpose command-line
+10. [fzf](https://github.com/junegunn/fzf) - general-purpose command-line
     fuzzy finder
-12. [gdu](https://github.com/dundee/gdu) - fast disk usage analyzer with
+11. [gdu](https://github.com/dundee/gdu) - fast disk usage analyzer with
     console interface written in Go
-13. [gh](https://github.com/cli/cli) - GitHub's official command line tool
-14. [ghostty](https://github.com/ghostty-org/ghostty) - fast, feature-rich
+12. [gh](https://github.com/cli/cli) - GitHub's official command line tool
+13. [ghostty](https://github.com/ghostty-org/ghostty) - fast, feature-rich
     terminal emulator with GPU acceleration
-15. [git](https://github.com/git/git) - distributed version control system
-16. [git-lfs](https://github.com/git-lfs/git-lfs) - Git extension for
+14. [git](https://github.com/git/git) - distributed version control system
+15. [git-lfs](https://github.com/git-lfs/git-lfs) - Git extension for
     versioning large files
-17. [jj](https://github.com/jj-vcs/jj) - Git-compatible VCS that is both
+16. [jj](https://github.com/jj-vcs/jj) - Git-compatible VCS that is both
     simple and powerful
-18. [jq](https://github.com/jqlang/jq) - lightweight command-line JSON
+17. [jq](https://github.com/jqlang/jq) - lightweight command-line JSON
     processor
-19. [karabiner-elements](https://github.com/pqrs-org/Karabiner-Elements) -
+18. [karabiner-elements](https://github.com/pqrs-org/Karabiner-Elements) -
     powerful keyboard customization tool for macOS
-20. [lazydocker](https://github.com/jesseduffield/lazydocker) - simple
+19. [lazydocker](https://github.com/jesseduffield/lazydocker) - simple
     terminal UI for Docker and Docker Compose
-21. [lazygit](https://github.com/jesseduffield/lazygit) - simple terminal UI
+20. [lazygit](https://github.com/jesseduffield/lazygit) - simple terminal UI
     for git commands
-22. [neovim](https://github.com/neovim/neovim) - Vim-fork focused on
+21. [neovim](https://github.com/neovim/neovim) - Vim-fork focused on
     extensibility and usability
-23. [starship](https://github.com/starship/starship) - minimal, blazing-fast,
+22. [starship](https://github.com/starship/starship) - minimal, blazing-fast,
     customizable prompt for any shell
-24. [stow](https://github.com/aspiers/stow) - symlink farm manager for
+23. [stow](https://github.com/aspiers/stow) - symlink farm manager for
     dotfiles
-25. [uv](https://github.com/astral-sh/uv) - extremely fast Python package and
+24. [uv](https://github.com/astral-sh/uv) - extremely fast Python package and
     project manager written in Rust
-26. [yazi](https://github.com/sxyazi/yazi) - blazing fast terminal file
+25. [yazi](https://github.com/sxyazi/yazi) - blazing fast terminal file
     manager written in Rust
-27. [yq](https://github.com/mikefarah/yq) - portable command-line YAML, JSON,
+26. [yq](https://github.com/mikefarah/yq) - portable command-line YAML, JSON,
     XML, CSV, and TOML processor
-28. [zoxide](https://github.com/ajeetdsouza/zoxide) - smarter cd command that
+27. [zoxide](https://github.com/ajeetdsouza/zoxide) - smarter cd command that
     remembers frequently visited directories
+
+uv managed tools:
+
+1. [dvc](https://github.com/iterative/dvc) - version control for large files
+    like media and datasets with cloud storage backends
 
 ## roadmap
 
