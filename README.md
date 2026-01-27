@@ -200,3 +200,4 @@ and unstructured worklows
 
 1. add `.editorconfig` to `.envrc` for repo defaults
 2. longterm use of github given new home in ms ai division
+3. automated vs manual updates to uv managed tools
