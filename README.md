@@ -3,6 +3,41 @@
 foundation set of cli/tui tools for GST!!! of course, this also installs
 [claude code](https://claude.com/product/claude-code) and a skill or two...
 
+## rationale
+
+why foundation? we want to optimize the things we need to do most often,
+reallocate our "thinking" to real tasks, not custodial tasks
+
+why add cli/tui in addition to gui apps/tools?
+
+gui apps/tools seem simpler at first glance -- point, click, done. but
+that simplicity is a tradeoff:
+
+- **surface consistency, deep chaos**: every app invents its own UX patterns.
+  multiply by device, OS, and platform variations. what you learned in one
+  context rarely transfers cleanly.
+- **hidden state**: where did that setting go? what's actually selected? GUIs
+  obscure the state of your system behind layers of menus and modals.
+- **geometry struggles**: resolution, scaling, window layouts -- an endless
+  negotiation between what you want and what the app allows.
+- **automation gap**: scripting GUIs is fragile at best. even state-of-the-art
+  AI models struggle to reliably orchestrate graphical interfaces.
+
+cli/tui tools take a different path:
+
+- **explicit**: commands say exactly what they do. no hunting through menus.
+- **repeatable**: same input, same output. every time.
+- **composable**: small tools that do one thing well, piped together.
+- **automatable**: scripts, aliases, hooks -- your workflow becomes code.
+- **version-controllable**: text configs live in git. diff, blame, revert.
+- **ai-native**: LLMs reason about text naturally. your tools become
+  orchestratable.
+
+this isn't about abandoning GUIs entirely. browsers, media editors, visual
+design tools -- some work genuinely requires graphical feedback. foundation
+provides the cli/tui layer for everything else: the daily operations where
+clarity, repeatability, and automation matter most.
+
 ## setup
 
 start by defining an environment variable in your `.zshrc` startup script
@@ -52,11 +87,9 @@ now complete complete setup as following:
 
 *reminder: periodically run `fupd` to keep foundation tools up-to-date...*
 
-## rationale
+## tools
 
-why foundation? we want to optimize the things we need to do most often,
-reallocate our "thinking" to real tasks, not custodial tasks. here's a summary
-of the core foundation tools:
+here's a summary of the core cli/tui/gui foundation tools:
 
 1. [atuin](https://github.com/atuinsh/atuin) - magical shell history with
     SQLite database and encrypted sync
@@ -148,7 +181,9 @@ vs [pass](https://www.passwordstore.org/))
 [lima](https://github.com/lima-vm/lima),
 [colima](https://github.com/abiosoft/colima), macos native containers, etc.)
 13. servers and services -- cloud vs local
-14. create skill to keep tools docs referenced above up-to-date
+14. leverage ai/frontier model scaffolding mechanisms (e.g. reusable prompts
+via tasks, skills, agents, hooks, etc.) to optimize/automate structured
+and unstructured worklows
 
 ## considerations
 
