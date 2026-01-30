@@ -10,8 +10,8 @@ Update the README.md tools section to document tools from Brewfile (brew managed
 Read/gather data from:
 1. **Brewfile**: Extract all tool names from `brew "toolname"` and `cask "toolname"` lines
 2. **uv tool list**: Run `uv tool list` to get installed uv tools (format: `toolname vX.Y.Z`)
-3. **README.md tools section**: Extract tool names from both numbered lists (homebrew managed and uv managed)
-4. **foundation/.foundation fupd()**: Extract `uv tool upgrade <toolname>` commands from the fupd() function
+3. **README.md tools section**: Extract tool names from both numbered lists (homebrew managed and uv managed). For uv tools with extras, parse `[tool-name](url)\[extra\]` format and extract as `tool-name[extra]`
+4. **foundation/.foundation fupd()**: Extract `uv tool upgrade <toolname>` commands from the fupd() function (may include extras like `dvc[gdrive]`)
 
 Compare these lists:
 - If all Brewfile tools are documented AND Brewfile is sorted AND all uv tools are documented AND uv tools section is sorted AND fupd() has all uv tool upgrades sorted, report "No changes needed" and **exit early**
@@ -56,6 +56,13 @@ Format each entry as:
 ```
 1. [tool-name](url) - description
 ```
+
+For uv tools with extras (e.g., `dvc[gdrive]`), format as:
+```
+1. [tool-name](url)\[extra\] - description
+```
+The `\[extra\]` is escaped to display literally in Markdown. When extracting tool
+names for `fupd()` upgrade commands, combine them as `tool-name[extra]` (unescaped).
 
 Rules:
 - No bold on links
@@ -110,7 +117,7 @@ function fupd() {
     brew update && brew upgrade
     nvim --headless "+Lazy! update" +qa
     uv self update
-    uv tool upgrade tool-a
+    uv tool upgrade dvc[gdrive]
     uv tool upgrade tool-b
     uv tool upgrade tool-c
     claude update
@@ -119,7 +126,8 @@ function fupd() {
 
 Rules for fupd():
 - Place `uv tool upgrade` commands immediately after `uv self update`
-- Sort tool names alphabetically
+- Sort tool names alphabetically (by base tool name, e.g., `dvc[gdrive]` sorts as `dvc`)
+- For tools with extras, use full specifier: `uv tool upgrade dvc[gdrive]`
 - Keep `claude update` as the last command
 
 ## Output

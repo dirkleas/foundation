@@ -42,7 +42,7 @@ function fupd() {
     brew update && brew upgrade
     nvim --headless "+Lazy! update" +qa
     uv self update
-    uv tool upgrade dvc
+    uv tool upgrade dvc[gdrive]
     claude update
 }
 

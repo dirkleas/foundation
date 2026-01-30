@@ -156,8 +156,8 @@ homebrew managed tools:
 
 uv managed tools:
 
-1. [dvc](https://github.com/iterative/dvc) - version control for large files
-    like media and datasets with cloud storage backends
+1. [dvc](https://github.com/iterative/dvc)\[gdrive\] - version control for large
+    files like media and datasets with Google Drive storage backend
 
 ## roadmap
 
