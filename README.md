@@ -151,7 +151,9 @@ homebrew managed tools:
     manager written in Rust
 27. [yq](https://github.com/mikefarah/yq) - portable command-line YAML, JSON,
     XML, CSV, and TOML processor
-28. [zoxide](https://github.com/ajeetdsouza/zoxide) - smarter cd command that
+28. [zellij](https://github.com/zellij-org/zellij) - terminal workspace and
+    multiplexer with batteries included, written in Rust
+29. [zoxide](https://github.com/ajeetdsouza/zoxide) - smarter cd command that
     remembers frequently visited directories
 
 uv managed tools:

@@ -23,6 +23,7 @@ brew "stow"
 brew "uv"
 brew "yazi"
 brew "yq"
+brew "zellij"
 brew "zoxide"
 
 # Casks - sorted alphabetically
