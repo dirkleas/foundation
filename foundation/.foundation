@@ -39,6 +39,7 @@ alias lzj=lazyjj
 alias v=nvim
 alias vi=nvim
 alias y=yazi
+alias z=zellij
 
 function fupd() {
     echo "updating foundation tools..."
