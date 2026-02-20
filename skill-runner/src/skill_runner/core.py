@@ -1,16 +1,51 @@
 """Core skill execution logic."""
 
 import asyncio
+import logging
 import subprocess
 from pathlib import Path
 
-from claude_code_sdk import ClaudeCodeOptions, query
+from claude_agent_sdk import ClaudeAgentOptions, query
 
 from .schema import Skill, load_skill
 
+logger = logging.getLogger(__name__)
+
+
+def _patch_sdk_message_parser() -> None:
+    """Patch SDK to gracefully handle unknown message types (e.g. rate_limit_event).
+
+    The claude-agent-sdk raises MessageParseError on unrecognized message types,
+    which kills the async generator mid-stream. This wraps parse_message to return
+    a SystemMessage for unknown types instead. Safe to call multiple times.
+    """
+    import claude_agent_sdk._internal.message_parser as mp
+    import claude_agent_sdk._internal.client as internal_client
+    from claude_agent_sdk.types import SystemMessage
+
+    if getattr(mp.parse_message, "_patched", False):
+        return
+
+    _original = mp.parse_message
+
+    def _safe_parse_message(data):
+        try:
+            return _original(data)
+        except Exception:
+            msg_type = data.get("type", "unknown") if isinstance(data, dict) else "unknown"
+            logger.debug("SDK: unrecognized message type '%s', wrapping as SystemMessage", msg_type)
+            return SystemMessage(subtype=msg_type, data=data if isinstance(data, dict) else {})
+
+    _safe_parse_message._patched = True  # type: ignore[attr-defined]
+    mp.parse_message = _safe_parse_message
+    internal_client.parse_message = _safe_parse_message
+
+
+_patch_sdk_message_parser()
+
 
 class SkillRunner:
-    """Executes skills via Claude Code SDK (uses subscription auth)."""
+    """Executes skills via Claude Agent SDK (uses subscription auth)."""
 
     def __init__(
         self,
@@ -53,8 +88,8 @@ class SkillRunner:
         return resolved
 
     async def _query(self, prompt: str) -> str:
-        """Run a query via Claude Code SDK."""
-        options = ClaudeCodeOptions(
+        """Run a query via Claude Agent SDK."""
+        options = ClaudeAgentOptions(
             model=self.model,
             max_turns=self.max_turns,
         )
@@ -72,7 +107,7 @@ class SkillRunner:
         inputs: dict[str, str] | None = None,
         stdin: str | None = None,
     ) -> str:
-        """Run a skill by name using Claude Code SDK.
+        """Run a skill by name using Claude Agent SDK.
 
         Args:
             skill_name: Name of the skill to run

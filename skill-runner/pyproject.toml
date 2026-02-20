@@ -5,7 +5,7 @@ description = "Execute Claude skills from CLI or MCP"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "claude-code-sdk>=0.0.25",
+    "claude-agent-sdk>=0.1.38",
     "pyyaml>=6.0",
     "pydantic>=2.0",
     "typer>=0.12.0",

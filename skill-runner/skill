@@ -2,7 +2,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "claude-code-sdk>=0.0.25",
+#     "claude-agent-sdk>=0.1.38",
 #     "pyyaml>=6.0",
 #     "pydantic>=2.0",
 #     "typer>=0.12.0",
@@ -25,6 +25,7 @@ Examples:
 from __future__ import annotations
 
 import asyncio
+import logging
 import subprocess
 import sys
 from pathlib import Path
@@ -32,11 +33,40 @@ from typing import Annotated, Any
 
 import typer
 import yaml
-from claude_code_sdk import ClaudeCodeOptions, query
+from claude_agent_sdk import ClaudeAgentOptions, query
 from pydantic import BaseModel, Field
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+
+logger = logging.getLogger(__name__)
+
+
+def _patch_sdk_message_parser() -> None:
+    """Patch SDK to gracefully handle unknown message types (e.g. rate_limit_event)."""
+    import claude_agent_sdk._internal.message_parser as mp
+    import claude_agent_sdk._internal.client as internal_client
+    from claude_agent_sdk.types import SystemMessage
+
+    if getattr(mp.parse_message, "_patched", False):
+        return
+
+    _original = mp.parse_message
+
+    def _safe_parse_message(data):
+        try:
+            return _original(data)
+        except Exception:
+            msg_type = data.get("type", "unknown") if isinstance(data, dict) else "unknown"
+            logger.debug("SDK: unrecognized message type '%s', wrapping as SystemMessage", msg_type)
+            return SystemMessage(subtype=msg_type, data=data if isinstance(data, dict) else {})
+
+    _safe_parse_message._patched = True  # type: ignore[attr-defined]
+    mp.parse_message = _safe_parse_message
+    internal_client.parse_message = _safe_parse_message
+
+
+_patch_sdk_message_parser()
 
 
 # === Schema ===
@@ -178,7 +208,7 @@ def list_skills(search_paths: list[Path] | None = None) -> list[dict[str, Any]]:
 
 
 class SkillRunner:
-    """Executes skills via Claude Code SDK (uses subscription auth)."""
+    """Executes skills via Claude Agent SDK (uses subscription auth)."""
 
     def __init__(
         self,
@@ -222,11 +252,11 @@ class SkillRunner:
         return None
 
     async def _query(self, prompt: str) -> str:
-        """Run a query via Claude Code SDK."""
-        options = ClaudeCodeOptions(
+        """Run a query via Claude Agent SDK."""
+        options = ClaudeAgentOptions(
             model=self.model,
             max_turns=self.max_turns,
-            append_system_prompt=self._temperature_prompt(),
+            system_prompt=self._temperature_prompt(),
         )
 
         result_parts = []
@@ -292,7 +322,7 @@ def run(
     """Run a skill with optional inputs.
 
     Inputs via --input, stdin, or auto-gathered from skill commands.
-    Uses Claude Code SDK with subscription auth (no API key needed).
+    Uses Claude Agent SDK with subscription auth (no API key needed).
     """
     input_dict: dict[str, str] = {}
     if inputs:

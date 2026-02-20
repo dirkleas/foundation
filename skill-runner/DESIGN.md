@@ -26,7 +26,7 @@ The original implementation piped the diff to `claude -p` with a prompt mentioni
 | `claude -p --system-prompt "$(cat skill)"` | ✓ | ✗ | Medium | Low |
 | `claude -p` with inline prompt | ✓ | ✗ | High | Low |
 | Skill file in `.claude/skills/` | ✗ | ✓ (if in project) | High | Low |
-| Claude Agent SDK (Python) | ✓ | ✗ | High | Medium |
+| Claude Agent SDK (`claude-agent-sdk`) | ✓ | ✗ | High | Medium |
 | MCP Server tool | ✓ | ✓ | High | High |
 
 ### Key Insight
@@ -114,7 +114,7 @@ For each input defined in skill:
 #!/usr/bin/env -S uv run --quiet --script
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["anthropic", "typer", "rich", ...]
+# dependencies = ["claude-agent-sdk", "typer", "rich", ...]
 # ///
 ```
 
@@ -134,14 +134,14 @@ For each input defined in skill:
 - MCP enables seamless integration without `!` escape
 - Same core logic, different interfaces
 
-### 5. Direct Anthropic SDK (not Agent SDK)
+### 5. Claude Agent SDK
 
-The Agent SDK is designed for multi-step agentic workflows with tool use. Skill execution is single-turn: prompt in → response out.
+Uses `claude-agent-sdk` (PyPI) for Claude Code CLI integration. This SDK handles the streaming protocol, message parsing, and authentication via the user's Claude Code subscription.
 
 **Rationale**:
-- Simpler, fewer dependencies
-- Lower latency
-- Appropriate for the task complexity
+- Direct integration with Claude Code CLI
+- Subscription auth (no API key needed)
+- Handles streaming message protocol
 
 ## Architecture
 
@@ -163,7 +163,8 @@ skill-runner/
 ```
 ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
 │   CLI/MCP   │────▶│ SkillRunner  │────▶│  Anthropic  │
-│   Request   │     │              │     │     API     │
+│   Request   │     │              │     │ Claude Code │
+│     CLI     │
 └─────────────┘     └──────────────┘     └─────────────┘
                            │
                            ▼

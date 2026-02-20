@@ -44,7 +44,7 @@ def run(
 
     Inputs can be provided via --input flags or piped via stdin.
     If not provided, inputs with commands will be auto-gathered.
-    Uses Claude Code SDK with subscription auth (no API key needed).
+    Uses Claude Agent SDK with subscription auth (no API key needed).
 
     Examples:
         skill run commit-messager
