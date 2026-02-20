@@ -24,7 +24,7 @@ alias f=yazi
 alias ffplay='ffplay -loglevel quiet -nodisp -autoexit'
 alias fffplay='ffplay -loglevel quiet -af "atempo=1.5" -nodisp -autoexit'
 alias ga="git add"
-alias gcam="ga . && ../foundation/skill-runner/skill run commit-messager | pbcopy && git commit && gp"
+alias gcam="ga . && claude -p \"/commit-messager\" | pbcopy && git commit && gp"
 alias gd="git diff"
 alias gdu=gdu-go
 alias gp="git push"
