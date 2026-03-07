@@ -1,11 +1,12 @@
-{
+  {
     "name": "custom-snippets",
     "contributes": {
-        "snippets": [
-            {
-                "language": "json",
-                "path": "./project.code-snippets"
-            }
-        ]
+      "snippets": [
+        {
+          "language": "json",
+          "path": "./project.code-snippets"
+        }
+      ]
     }
-}
+  }
+
