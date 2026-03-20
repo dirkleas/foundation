@@ -2,7 +2,7 @@
 
 shell-integration = zsh
 font-size = 18
-font-family = Menlo
+font-family = JetBrains Nerd Font Mono 
 window-save-state = always
 background-opacity = 0.85
 background-blur-radius = 40
