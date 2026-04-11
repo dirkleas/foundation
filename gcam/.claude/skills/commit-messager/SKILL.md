@@ -7,11 +7,13 @@ inputs:
     description: Staged git changes to generate commit message for
 output:
   format: text
+model: sonnet
 ---
 
 OUTPUT RULE: Your response is the commit message. Nothing else. No intro. No fences. No explanation.
 
 START YOUR RESPONSE WITH ONE OF THESE EXACT PREFIXES:
+
 - feat:
 - feat(scope):
 - fix:
@@ -36,7 +38,7 @@ If you write "Here's" or "Based on", you have failed.
 
 type(scope): description (max 50 chars, imperative mood, no period)
 
- - Body line explaining why (optional, wrap at 72 chars)
+- Body line explaining why (optional, wrap at 72 chars)
 
 Refs: #123 (optional footer)
 
@@ -44,7 +46,7 @@ Refs: #123 (optional footer)
 
 feat(model): add timestamp fields for answer duration
 
- - Replace single timestamp with start/end to capture discussion length.
+- Replace single timestamp with start/end to capture discussion length.
 
 ---
 
