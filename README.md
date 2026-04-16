@@ -44,55 +44,68 @@ start by defining an environment variable in your `.zshrc` startup script
 specifying where you work on projects the foundation tools will help you with
 -- we call them "h4x" for strategic hacks...
 
-for example, if you want **h4x** in your home diretory, you'd add the following:
+for example, if you want **h4x** in your home directory, you'd add the following:
 
 ```bash
 export H4X=$HOME/h4x
 ```
 
-now complete complete setup as following:
+reload your shell so `$H4X` is set in the current session:
 
-1. clone `foundation` repo into `$H4X` folder:
+```bash
+source ~/.zshrc
+```
+
+now complete setup as following:
+
+1. create `$H4X` and clone `foundation` into it:
 
     ```bash
+    mkdir -p $H4X && cd $H4X
     git clone https://github.com/dirkleas/foundation
     ```
 
 2. install [homebrew](https://brew.sh)
-3. install foundation tools managed by homebrew:
+3. install foundation tools managed by homebrew (run from the repo so `Brewfile` is picked up):
 
     ```bash
+    cd $H4X/foundation
     brew bundle
     ```
 
+    open a new shell (or `hash -r`) so newly installed binaries (`uv`, `stow`, etc.) are on `PATH`.
 4. install foundation tools managed by uv:
 
     ```bash
     uv tool install "dvc[gdrive]"
     ```
 
-5. install [claude-code](https://code.claude.com/docs/en/setup)
+5. install [claude-code](https://code.claude.com/docs/en/setup), then run `claude` once and choose the **Claude subscription** login (not an API key) so usage is billed against your Pro/Max plan
 6. install lazyvim distro to supercharge stock neovim:
 
     ```bash
-    mv ~/.config/nvim{,.bak} > /dev/null
+    mkdir -p ~/.config
+    mv ~/.config/nvim{,.bak} 2>/dev/null || true
     git clone https://github.com/LazyVim/starter ~/.config/nvim
     rm -rf ~/.config/nvim/.git
     ```
 
-7. run `espanso` and `karabiner` apps, considering default prompts
-8. configure foundation tools:
+7. launch `espanso` and `karabiner-elements` once, accepting default prompts. macOS will ask karabiner for **Accessibility** and **Input Monitoring** permissions — grant both, then relaunch the app.
+8. configure foundation tools (run from `$H4X/foundation`):
 
     ```bash
-    rm ~/.config/karabiner/karabiner.json ~/.config/nvim/lua/config/options.lua
+    cd $H4X/foundation
+    rm -f ~/.config/karabiner/karabiner.json ~/.config/nvim/lua/config/options.lua
     stow --target $HOME stow foundation lazyvim direnv gcam ghostty espanso karabiner
     echo source ~/.foundation >> ~/.zshrc
-    espanso service register # considering default prompts
+    espanso service register # accept default prompts
+    espanso service start
     ```
 
-9. restart `ghostty` and enjoy!
+    if stow reports conflicts, resolve them before continuing — otherwise `~/.foundation` may not be symlinked and the next step will have nothing to source.
+9. launch `ghostty` (first run) and enjoy!
 
-*reminder: periodically run `fupd` to keep foundation tools up-to-date...*
+*reminder: periodically run `fupd` (shipped via the stowed `foundation` package, sourced from `~/.foundation`) to keep foundation tools up-to-date...*
 
 ## tools
 
