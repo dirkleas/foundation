@@ -84,6 +84,7 @@ now complete complete setup as following:
 8. configure foundation tools:
 
     ```bash
+    rm ~/.config/karabiner/karabiner.json ~/.config/nvim/lua/config/options.lua
     stow --target $HOME stow foundation lazyvim direnv gcam ghostty espanso karabiner
     echo source ~/.foundation >> ~/.zshrc
     espanso service register # considering default prompts
