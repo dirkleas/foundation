@@ -223,3 +223,6 @@ and unstructured worklows
 1. add `.editorconfig` to `.envrc` for repo defaults
 2. longterm use of github given new home in ms ai division
 3. automated vs manual updates to uv managed tools
+4. add `sudo pmset -a disablesleep 1` and verify with
+`pmset -g | rg SleepDisabled` to disable autosleep on macos to allow long
+running background processes via zellij, tmux, etc.
